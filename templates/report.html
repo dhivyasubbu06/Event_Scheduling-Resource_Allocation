@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resource Report</title>
+    <style>
+        body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #2c3e50;
+    text-align: center;
+}
+
+
+h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 25px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    width: 320px;
+    margin: 0 auto 30px auto;
+}
+
+
+form label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #34495e;
+}
+
+
+form input[type="datetime-local"] {
+    width: 100%;
+    padding: 7px 8px;
+    font-size: 13px;
+    border: 1px solid #cfd6dc;
+    border-radius: 4px;
+}
+
+form button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background-color: #1f6feb;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+form button:hover {
+    background-color: #1558c0;
+}
+
+
+
+table {
+    width: 85%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+th {
+    padding: 12px 14px;
+    background-color: #1f6feb; 
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 1px solid #1558c0;
+}
+
+td {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+
+tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+
+
+tr:hover td {
+    background-color: #eef4ff;
+}
+
+</style>
+    
+</head>
+<body>
+    <h2 style="text-align:center;">Resource Utilization Report</h2>
+
+    <form method="post">
+        <label>Start Date & Time:</label>
+        <input type="datetime-local" name="start" required>
+
+        <label>End Date & Time:</label>
+        <input type="datetime-local" name="end" required>
+
+        <button type="submit">Generate Report</button>
+    </form>
+
+    {% if report_data %}
+    <table>
+        <tr>
+            <th>Resource</th>
+            <th>Total Bookings</th>
+            <th>Total Hours Utilized</th>
+            <th>Upcoming Bookings</th>
+        </tr>
+        {% for r in report_data %}
+        <tr>
+            <td>{{ r.resource }}</td>
+            <td>{{ r.total_events }}</td>
+            <td>{{ r.hours }}</td>
+            <td>{{ r.upcoming }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>

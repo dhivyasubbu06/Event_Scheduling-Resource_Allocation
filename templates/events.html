@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h2>{{ edit_event and 'Edit Event' or 'Create Event' }}</h2>
+
+   
+    {% if error %}
+        <p style="color:red; text-align:center;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post" class="event-form">
+        {% if edit_event %}
+            <input type="hidden" name="event_id" value="{{ edit_event.event_id }}">
+        {% endif %}
+
+        <input type="text" name="title" placeholder="Event Title" required
+               value="{{ edit_event.title if edit_event else '' }}">
+
+        <label>Start Time:</label>
+        <input type="datetime-local" name="start" required
+               value="{{ edit_event.start_time.strftime('%Y-%m-%dT%H:%M') if edit_event else '' }}">
+
+        <label>End Time:</label>
+        <input type="datetime-local" name="end" required
+               value="{{ edit_event.end_time.strftime('%Y-%m-%dT%H:%M') if edit_event else '' }}">
+
+        <input type="text" name="desc" placeholder="Description"
+               value="{{ edit_event.description if edit_event else '' }}">
+
+        <button type="submit">{{ edit_event and 'Update Event' or 'Add Event' }}</button>
+        {% if edit_event %}
+            <a href="/events"><button type="button">Cancel</button></a>
+        {% endif %}
+    </form>
+
+    <hr>
+
+    <h2>Events List</h2>
+    <div class="events-list">
+        {% for event in events %}
+            <div class="event-item">
+                <h3>{{ event.title }}</h3>
+                <p>
+                    <b>Start:</b> {{ event.start_time }} <br>
+                    <b>End:</b> {{ event.end_time }}
+                </p>
+
+                {% if event.description %}
+                    <p>{{ event.description }}</p>
+                {% endif %}
+
+                
+                <div style="display:flex; gap:10px;">
+                    <a href="{{ url_for('events', edit_event=event.event_id) }}">
+                        <button type="button">Edit</button>
+                    </a>
+
+                    <form action="/delete_event/{{ event.event_id }}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p>No events added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
